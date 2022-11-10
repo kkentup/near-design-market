@@ -6,13 +6,17 @@
   "license": "MIT",
   "type": "module",
   "scripts": {
-    "build": "near-sdk-js build src/index.ts build/market.wasm"
+    "build": "near-sdk-js build src/index.ts build/market.wasm",
+    "test": "ava"
   },
   "dependencies": {
-    "near-sdk-js": "^0.5.0",
-    "lodash-es": "^4.17.21"
+    "lodash-es": "^4.17.21",
+    "near-sdk-js": "^0.5.0"
   },
   "devDependencies": {
+    "@types/lodash-es": "^4.17.6",
+    "ava": "^5.0.1",
+    "near-workspaces": "^3.2.2",
     "typescript": "^4.8.0"
   }
 }

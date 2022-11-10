@@ -1,5 +1,5 @@
-const GAS = "300000000000000";
-const STORAGE = "1000000000000000000000000";
+const GAS = "300_000_000_000_000";
+const STORAGE = "1_000_000_000_000_000_000_000_000";
 
 
 export async function newDesign({ objectId: object_id, type, price, image }) {

@@ -26,7 +26,7 @@ export class Contract {
         let initialStorageUsage = near.storageUsage();
 
         let offers: { [accountId: string] : string } = {};
-        let design = create_design({contract: this, object_id: object_id, type: type, price: price, image: image, offers: offers});
+        let design = create_design({contract: this, object_id, type, price, image, offers});
         if (design == null) {
             throw Error("Design is not created successfully");
         }
@@ -40,7 +40,7 @@ export class Contract {
     @call({ payableFunction: true })
     // put new design
     buy_design({object_id} : {object_id: string}) {
-        let design = get_design({contract: this, object_id: object_id});
+        let design = get_design({contract: this, object_id});
         if (BigInt(design.price) > near.attachedDeposit().valueOf()) {
             throw Error("attached deposit must be greater than the design's price");
         }
@@ -52,7 +52,7 @@ export class Contract {
     @call({ payableFunction: true })
     // update sale status
     transfer_design({object_id, new_owner} : {object_id: string, new_owner: string}) {
-        let design = get_design_owned({contract: this, object_id: object_id});
+        let design = get_design_owned({contract: this, object_id});
         design.owner = new_owner;
         this.designs.set(object_id, design);
     }
@@ -60,7 +60,7 @@ export class Contract {
     @call({ payableFunction: true })
     // update sale price
     update_price({object_id, price} : {object_id: string, price: string}) {
-        let design = get_design_owned({contract: this, object_id: object_id});
+        let design = get_design_owned({contract: this, object_id});
         design.price = price;
         this.designs.set(object_id, design);
     }
@@ -68,7 +68,7 @@ export class Contract {
     @call({ payableFunction: true })
     // update sale status
     update_sale({object_id, on_sale} : {object_id: string, on_sale: boolean}) {
-        let design = get_design_owned({contract: this, object_id: object_id});
+        let design = get_design_owned({contract: this, object_id});
         assert(design.on_sale != on_sale, "No need to update sale status");
         design.on_sale = on_sale;
         this.designs.set(object_id, design);
@@ -77,7 +77,7 @@ export class Contract {
     @call({ payableFunction: true })
     // place an offer on a specific design
     add_offer({object_id} : {object_id: string}) {
-        let design = get_design({contract: this, object_id: object_id});
+        let design = get_design({contract: this, object_id});
         let bidder = near.predecessorAccountId();
         assert(bidder != design.owner, "Owner cannot put an offer on her/his own Design");
         let offer = near.attachedDeposit().valueOf();
@@ -87,14 +87,14 @@ export class Contract {
             new_offers[key] = value;
         });
         new_offers[bidder] = offer.toString();
-        let new_design = replace_design({design: design, offers: new_offers});
+        let new_design = replace_design({design, offers: new_offers});
         this.designs.set(object_id, new_design);
     }
 
     @call({ payableFunction: true })
     // place an offer on a specific design
     remove_offer({object_id} : {object_id: string}) {
-        let design = get_design({contract: this, object_id: object_id});
+        let design = get_design({contract: this, object_id});
         let bidder = near.predecessorAccountId();
         let new_offers: { [accountId: string] : string } = {};
         Object.entries(design.offers).forEach(([key, value], index) => {
@@ -102,14 +102,14 @@ export class Contract {
                 new_offers[key] = value;
             }
         });
-        let new_design = replace_design({design: design, offers: new_offers});
+        let new_design = replace_design({design, offers: new_offers});
         this.designs.set(object_id, new_design);
     }
 
     @call({ payableFunction: true })
     // take an offer on a specific design
     take_offer({object_id, bidder} : {object_id: string, bidder: string}) {
-        let design = get_design_owned({contract: this, object_id: object_id});
+        let design = get_design_owned({contract: this, object_id});
         let new_offers: { [accountId: string] : string } = {};
         let offer = "0";
         Object.entries(design.offers).forEach(([key, value], index) => {
@@ -119,9 +119,15 @@ export class Contract {
                 offer = value;
             }
         });
-        let new_design = replace_design({design: design, offers: new_offers});
+        let new_design = replace_design({design, offers: new_offers});
         this.designs.set(object_id, new_design);
         purchase_process({design: new_design, buyer: bidder, offer: BigInt(offer)});
+    }
+
+    @view({})
+    // returns the owner of the contract
+    get_owner() {
+        return this.owner_id;
     }
 
     @view({})
@@ -133,7 +139,7 @@ export class Contract {
     @view({})
     //returns the number of sales for a given account (result is a string)
     get_offers_by_object_id({object_id} : {object_id: string}) {
-        let design = get_design_no_deposit({contract: this, object_id: object_id});
+        let design = get_design_no_deposit({contract: this, object_id});
         const output = Object.keys(design.offers).map((key) => {
             return {
               accountId: key,
@@ -146,7 +152,7 @@ export class Contract {
     @view({})
     //returns the number of sales for a given account (result is a string)
     get_offer_by_acct_id({object_id, acct_id} : {object_id: string, acct_id: string}) {
-        let design = get_design_no_deposit({contract: this, object_id: object_id});
+        let design = get_design_no_deposit({contract: this, object_id});
         Object.entries(design.offers).forEach(([key, value], index) => {
             if (key == acct_id) {
                 return value;

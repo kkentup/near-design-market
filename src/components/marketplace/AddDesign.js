@@ -32,7 +32,7 @@ const AddDesign = ({ save }) => {
                     <Modal.Body>
                         <FloatingLabel
                             controlId="inputObjectId"
-                            label="Design objectificate Id"
+                            label="Design object Id"
                             className="mb-3"
                         >
                             <Form.Control
@@ -40,7 +40,7 @@ const AddDesign = ({ save }) => {
                                 onChange={(e) => {
                                     setObjectId(e.target.value);
                                 }}
-                                placeholder="Enter objectificate ID of design"
+                                placeholder="Enter object ID of design"
                             />
                         </FloatingLabel>
                         <FloatingLabel

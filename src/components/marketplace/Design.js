@@ -4,7 +4,7 @@ import { utils } from "near-api-js";
 import { Card, Button, Col, Badge, Stack } from "react-bootstrap";
 
 const Design = ({ design, buy, putOffer, takeOffer }) => {
-    const { objectificate_id: object_id, type, orig_owner, owner, on_sale, price, image, offers } =
+    const { object_id: object_id, type, orig_owner, owner, on_sale, price, image, offers } =
         design;
 
     const triggerBuy = () => {

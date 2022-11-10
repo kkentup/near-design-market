@@ -99,7 +99,7 @@ export function get_design_owned({
     return design;
 }
 
-// return the design of objectian id
+// return the design of specific id
 // should only make changes for "purchase" and "offer" after return
 export function get_design({
     contract,
@@ -116,7 +116,7 @@ export function get_design({
     return design;
 }
 
-// return the design of objectian id
+// return the design of specific id
 // should only be called in "view" functions
 export function get_design_no_deposit({
     contract,
