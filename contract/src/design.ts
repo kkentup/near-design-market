@@ -7,7 +7,10 @@ export class Design {
     on_sale: boolean;
     price: string;
     image: string;
+    reports: number;
+    copyright_deposit: string;
     offers: { [accountId: string] : string };
+    timeStamp: string;
 
     constructor(
         {
@@ -16,7 +19,9 @@ export class Design {
             type,
             price,
             image,
-            offers
+            offers,
+            deposit,
+            timeStamp
         }:{
             owner: string,
             object_id: string,
@@ -24,6 +29,8 @@ export class Design {
             price: string,
             image: string,
             offers: { [accountId: string] : string },
+            deposit: string,
+            timeStamp: string
         }) {
         this.object_id = object_id;
         this.type = type;
@@ -32,6 +39,9 @@ export class Design {
         this.on_sale = true;
         this.price = price;
         this.image = image;
+        this.reports = 0;
+        this.copyright_deposit = deposit;
         this.offers = offers;
+        this.timeStamp = timeStamp;
     }
 }
