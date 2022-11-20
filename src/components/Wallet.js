@@ -1,5 +1,6 @@
 import React from "react";
 import { Dropdown, Stack, Spinner } from "react-bootstrap";
+import { IoFingerPrint } from "react-icons/io5";
 
 const Wallet = ({ address, amount, symbol, logout }) => {
     if (address) {

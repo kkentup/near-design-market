@@ -5,9 +5,72 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  color:blueviolet;
 }
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+.diagonal-gradient {
+  background: linear-gradient(black, #E9967A);
+}
+
+.background {
+  background: radial-gradient(#E9967A, black);
+}
+
+.background2{
+  background: linear-gradient(black, #E9967A);
+}
+
+.title {
+  color:#800000;
+  font-style: italic;
+  font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+  font-size:800%;
+  font-variant-position:sub;
+  margin-left: 31%;
+
+}
+
+.sub-title{
+  color:#591202;
+  font-variant-position:inherit;
+  font-size:150%;
+  margin-left: 37%;
+}
+
+.third-title{
+  color:#E9967A;
+  font-family:fantasy;
+  font-size:200%
+}
+
+.card-background{
+  background: radial-gradient(at 0% 30%, #a86552 10px, #e7d2ba 30%, #566670 50%);
+}
+
+.card-background1{
+  background: radial-gradient(ellipse farthest-corner at 90% 90%,
+  #a86552 , #e7d2ba 20%, #566670 50%, #d1a293);
+}
+
+.new-add-card{
+  background: repeating-linear-gradient(-45deg, red, red 5px, blue 5px, blue 10px);
+}
+
+.new-add-card-head{
+  background:#03a3ff;
+}
+
+.content{
+  color:#ff5f03;
+  font-size:200%
+}
+
+.content2{
+  color:#033e3e;
+  font-size: 120%;
 }

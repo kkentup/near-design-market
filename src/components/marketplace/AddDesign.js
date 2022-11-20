@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { Button, Modal, Form, FloatingLabel } from "react-bootstrap";
+import {IconButton} from "@mui/material";
+import { FcIdea } from "react-icons/fc";
 
 const AddDesign = ({ save }) => {
     const [objectId, setObjectId] = useState("");
@@ -15,21 +17,17 @@ const AddDesign = ({ save }) => {
     const handleShow = () => setShow(true);
 
     return (
-        <>
-            <Button
-                onClick={handleShow}
-                variant="dark"
-                className="rounded-pill px-0"
-                style={{ width: "38px" }}
-            >
-                <i className="bi bi-plus"></i>
-            </Button>
+        <div>
+            <IconButton onClick={handleShow}>
+                <FcIdea size={60} />
+            </IconButton>
+
             <Modal show={show} onHide={handleClose} centered>
-                <Modal.Header closeButton>
-                    <Modal.Title>New Design</Modal.Title>
+                <Modal.Header closeButton className="new-add-card-head">
+                    <Modal.Title>Post New Design</Modal.Title>
                 </Modal.Header>
                 <Form>
-                    <Modal.Body>
+                    <Modal.Body className="new-add-card">
                         <FloatingLabel
                             controlId="inputObjectId"
                             label="Design object Id"
@@ -58,7 +56,7 @@ const AddDesign = ({ save }) => {
                         </FloatingLabel>
                         <FloatingLabel
                             controlId="inputType"
-                            label="Type"
+                            label="Design Type"
                             className="mb-3"
                         >
                             <Form.Control
@@ -84,10 +82,7 @@ const AddDesign = ({ save }) => {
                         </FloatingLabel>
                     </Modal.Body>
                 </Form>
-                <Modal.Footer>
-                    <Button variant="outline-secondary" onClick={handleClose}>
-                        Close
-                    </Button>
+                <Modal.Footer className="new-add-card">
                     <Button
                         variant="dark"
                         disabled={!isFormFilled()}
@@ -101,11 +96,11 @@ const AddDesign = ({ save }) => {
                             handleClose();
                         }}
                     >
-                        Save design
+                        PUBLISH
                     </Button>
                 </Modal.Footer>
             </Modal>
-        </>
+        </div>
     );
 };
 

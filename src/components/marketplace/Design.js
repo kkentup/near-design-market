@@ -35,7 +35,7 @@ const Design = ({ design, buy, putOffer, takeOffer }) => {
 
     return (
         <Col key={object_id}>
-            <Card className=" h-100">
+            <Card className="card-background1">
                 <Card.Header>
                     <Stack direction="horizontal" gap={2}>
                         <span className="font-monospace text-secondary">{owner}</span>
@@ -58,24 +58,34 @@ const Design = ({ design, buy, putOffer, takeOffer }) => {
                         onClick={triggerBuy}
                         className="w-100 py-3"
                     >
-                        Buy for {utils.format.formatNearAmount(price)} NEAR
+                        <h2 className="content2">
+                            Buy for
+                            {utils.format.formatNearAmount(price)}
+                            NEAR
+                        </h2>
                     </Button>
                     <Button
                         variant="outline-dark"
                         onClick={triggerPutOffer}
                         className="w-100 py-3"
                     >
-                        Place an offer
+                        <h1 class="content">Place an offer</h1>
                     </Button>
                     <Button
                         variant="outline-dark"
                         onClick={triggerTakeOffer}
                         className="w-100 py-3"
                     >
-                        Take top offer for {utils.format.formatNearAmount((getTopBidder().top_offer))} NEAR
+                        <h2 class="content2">
+                            Take top offer for
+                            {utils.format.formatNearAmount((getTopBidder().top_offer))}
+                            NEAR
+                        </h2>
                     </Button>
                 </Card.Body>
             </Card>
+            <br />
+            <br />
         </Col>
     );
 };

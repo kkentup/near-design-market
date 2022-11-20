@@ -24,7 +24,8 @@ const App = function AppWrapper() {
     }, [getBalance]);
 
     return (
-        <>
+        <div className="background2">
+            <header></header>
             <Notification />
             {account.accountId ? (
                 <Container fluid="md">
@@ -45,7 +46,7 @@ const App = function AppWrapper() {
             ) : (
                 <Cover name="Design Market" login={login} coverImg={coverImg} />
             )}
-        </>
+        </div>
     );
 };
 
