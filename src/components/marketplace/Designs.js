@@ -48,8 +48,12 @@ const Designs = ({account}) => {
     };
 
     // function to buy Design
-    const buy = async (id, price) => {
+    const buy = async (id, price, isOwner) => {
         try {
+            if (isOwner) {
+                toast(<NotificationSuccess text="Start downloading soon..." />);
+                return;
+            }
             await buyDesign({id, price}).then((resp) => {
                 getDesigns();
             });
@@ -118,7 +122,7 @@ const Designs = ({account}) => {
                                 buy={buy}
                                 putOffer={newOffer}
                                 takeOffer={acceptOffer}
-                                account
+                                account = {account}
                             />
                         ))}
                     </Row>

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { Button, Modal, Form, FloatingLabel } from "react-bootstrap";
-import {IconButton} from "@mui/material";
+import { IconButton } from "@mui/material";
 import { FcIdea } from "react-icons/fc";
 
 const AddDesign = ({ save }) => {
@@ -14,7 +14,14 @@ const AddDesign = ({ save }) => {
 
     const [show, setShow] = useState(false);
 
-    const handleClose = () => setShow(false);
+    const handleClose = () => {
+        setShow(false);
+        setObjectId("");
+        setImage("");
+        setPrice("");
+        setType(0);
+        setDeposit("");
+    }
     const handleShow = () => setShow(true);
 
     return (
@@ -60,13 +67,21 @@ const AddDesign = ({ save }) => {
                             label="Design Type"
                             className="mb-3"
                         >
-                            <Form.Control
-                                type="number"
-                                placeholder="Type"
+                            <Form.Select
+                                type="text"
+                                placeholder="Design Type"
                                 onChange={(e) => {
                                     setType(e.target.value);
                                 }}
-                            />
+                            >
+                                // 0: Jewelry, 1: Custume, 2: Furniture, 3: Electronic Devices, 4: Accessories
+                                <option>Please select a design type</option>
+                                <option value="0">Jewelry</option>
+                                <option value="1">Custume</option>
+                                <option value="2">Furniture</option>
+                                <option value="3">Electronic Devices</option>
+                                <option value="4">Accessories</option>
+                            </Form.Select>
                         </FloatingLabel>
                         <FloatingLabel
                             controlId="inputPrice"

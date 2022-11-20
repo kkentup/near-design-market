@@ -40,11 +40,11 @@ const App = function AppWrapper() {
                         </Nav.Item>
                     </Nav>
                     <main>
-                        <Designs account/>
+                        <Designs account={account.accountId}/>
                     </main>
                 </Container>
             ) : (
-                <Cover name="Design Market" login={login} coverImg={coverImg} />
+                <Cover name="Design Farmers' Market" login={login} coverImg={coverImg} />
             )}
         </div>
     );

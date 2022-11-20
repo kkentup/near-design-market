@@ -8,13 +8,25 @@ const Design = ({ design, buy, putOffer, takeOffer, account }) => {
 
     const offerExist = () => Object.keys(offers).length > 0;
 
+    const isOwner = () => account == owner;
+
+    const getPurchaseText = () => {
+        let purchaseText;
+        if (isOwner()) {
+            purchaseText = "Download design files";
+        } else {
+            purchaseText = `Buy for ${utils.format.formatNearAmount(price)} NEAR`;
+        }
+        return purchaseText;
+    }
+
     const getOfferText = () => {
         let offerText;
         if (Object.keys(offers).length == 0) {
             offerText = "NO offer available";
         } else {
             console.log(getTopBidder().top_offer);
-            offerText =  `Take top offer for \
+            offerText = `Take top offer for \
                 ${utils.format.formatNearAmount((getTopBidder().top_offer))} \
                 NEAR`;
         }
@@ -23,15 +35,15 @@ const Design = ({ design, buy, putOffer, takeOffer, account }) => {
 
     const getTypeText = () => {
         let typeText;
-        // 0: Jewelry, 1: Shoes, 2: Handbags, 3: Clothes, 4: Accessories
+        // 0: Jewelry, 1: Custume, 2: Furniture, 3: Electronic Devices, 4: Accessories
         if (type == 0) {
             typeText = "Jewelry";
         } else if (type == 1) {
-            typeText = "Shoes";
+            typeText = "Custume";
         } else if (type == 2) {
-            typeText = "Handbags";
+            typeText = "Furniture";
         } else if (type == 3) {
-            typeText = "Clothes";
+            typeText = "Electronic Devices";
         } else {
             typeText = "Accessories";
         }
@@ -39,7 +51,7 @@ const Design = ({ design, buy, putOffer, takeOffer, account }) => {
     }
 
     const triggerBuy = () => {
-        buy(object_id, price);
+        buy(object_id, price, isOwner());
     };
 
     const triggerPutOffer = () => {
@@ -93,13 +105,14 @@ const Design = ({ design, buy, putOffer, takeOffer, account }) => {
                         className="w-100 py-3"
                     >
                         <h2 className="content2">
-                            Buy for {utils.format.formatNearAmount(price)} NEAR
+                            {getPurchaseText()}
                         </h2>
                     </Button>
                     <Button
                         variant="outline-dark"
                         onClick={triggerPutOffer}
                         className="w-100 py-3"
+                        disabled={isOwner()}
                     >
                         <h1 className="content2">Place an offer</h1>
                     </Button>

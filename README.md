@@ -1,4 +1,4 @@
-# near-design-market
+# near-design-farmers'-market
 **developed by husband and wife**
 
 **1**\. To run this project is easy, you need run the following commands
@@ -7,7 +7,7 @@
 
 **1.2** "npm start"
 
-Then you can open http://localhost:3000/ to see the app.
+Then you can open http://localhost:3000/ to see the app. Smart contract ("designtest1.kentup.testnet") currently deployed on testnet is used by default.
 
 **2**\. Smart contract is in folder "contract"
 
