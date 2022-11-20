@@ -9,7 +9,8 @@ const AddDesign = ({ save }) => {
     const [image, setImage] = useState("");
     const [type, setType] = useState(0);
     const [price, setPrice] = useState("");
-    const isFormFilled = () => objectId && image && type && price;
+    const [deposit, setDeposit] = useState("");
+    const isFormFilled = () => objectId && image && type && price && deposit;
 
     const [show, setShow] = useState(false);
 
@@ -80,6 +81,19 @@ const AddDesign = ({ save }) => {
                                 }}
                             />
                         </FloatingLabel>
+                        <FloatingLabel
+                            controlId="inputPrice"
+                            label="Copyright Deposit"
+                            className="mb-3"
+                        >
+                            <Form.Control
+                                type="text"
+                                placeholder="Copyright Deposit"
+                                onChange={(e) => {
+                                    setDeposit(e.target.value);
+                                }}
+                            />
+                        </FloatingLabel>
                     </Modal.Body>
                 </Form>
                 <Modal.Footer className="new-add-card">
@@ -92,6 +106,7 @@ const AddDesign = ({ save }) => {
                                 type,
                                 price,
                                 image,
+                                deposit,
                             });
                             handleClose();
                         }}

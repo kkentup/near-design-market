@@ -40,7 +40,7 @@ const App = function AppWrapper() {
                         </Nav.Item>
                     </Nav>
                     <main>
-                        <Designs />
+                        <Designs account/>
                     </main>
                 </Container>
             ) : (

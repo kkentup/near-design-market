@@ -1,9 +1,10 @@
-const GAS = "300_000_000_000_000";
-const STORAGE = "1_000_000_000_000_000_000_000_000";
+const GAS = "300000000000000";
+const STORAGE = "1000000000000000000000000";
 
 
-export async function newDesign({ objectId: object_id, type, price, image }) {
-    await window.contract.new_design( {args: { object_id: object_id, type: Number(type), price: price, image: image }, gas: GAS, amount: STORAGE});
+export async function newDesign({ objectId: object_id, type, price, image, deposit }) {
+    let attachedValue = BigInt(deposit) + BigInt(STORAGE);
+    await window.contract.new_design( {args: { object_id, type: Number(type), price, image, deposit }, gas: GAS, amount: attachedValue.toString()});
 }
 
 export async function buyDesign({ object_id, price }) {

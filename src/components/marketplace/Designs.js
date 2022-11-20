@@ -15,7 +15,7 @@ import {
 
 window.Buffer = window.Buffer || require("buffer").Buffer;
 
-const Designs = () => {
+const Designs = ({account}) => {
     const [designs, setDesigns] = useState([]);
     const [loading, setLoading] = useState(false);
 
@@ -80,6 +80,10 @@ const Designs = () => {
     // function to take the top offer on a Design
     const acceptOffer = async (id, bidder) => {
         try {
+            if (bidder == null) {
+                toast(<NotificationSuccess text="Only the owner can take the offer." />);
+                return;
+            }
             setLoading(true);
             takeOffer({id, bidder}).then((resp) => {
                 getDesigns();
@@ -105,7 +109,7 @@ const Designs = () => {
                         <h1 className="third-title">The Fabulous designs over the world for you here :) </h1>
                         <AddDesign save={addDesign} />
                     </div>
-                    <Row xs={1} sm={2} lg={3} className="g-3    mb-5 g-xl-4 g-xxl-5">
+                    <Row xs={1} sm={2} lg={3} className="g-3 mb-5 g-xl-4 g-xxl-5">
                         {designs.map((_design) => (
                             <Design
                                 design={{
@@ -114,6 +118,7 @@ const Designs = () => {
                                 buy={buy}
                                 putOffer={newOffer}
                                 takeOffer={acceptOffer}
+                                account
                             />
                         ))}
                     </Row>

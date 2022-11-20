@@ -3,9 +3,40 @@ import PropTypes from "prop-types";
 import { utils } from "near-api-js";
 import { Card, Button, Col, Badge, Stack } from "react-bootstrap";
 
-const Design = ({ design, buy, putOffer, takeOffer }) => {
-    const { object_id: object_id, type, orig_owner, owner, on_sale, price, image, offers } =
-        design;
+const Design = ({ design, buy, putOffer, takeOffer, account }) => {
+    const { object_id: object_id, type, orig_owner, owner, on_sale, price, image, offers } = design;
+
+    const offerExist = () => Object.keys(offers).length > 0;
+
+    const getOfferText = () => {
+        let offerText;
+        if (Object.keys(offers).length == 0) {
+            offerText = "NO offer available";
+        } else {
+            console.log(getTopBidder().top_offer);
+            offerText =  `Take top offer for \
+                ${utils.format.formatNearAmount((getTopBidder().top_offer))} \
+                NEAR`;
+        }
+        return offerText;
+    }
+
+    const getTypeText = () => {
+        let typeText;
+        // 0: Jewelry, 1: Shoes, 2: Handbags, 3: Clothes, 4: Accessories
+        if (type == 0) {
+            typeText = "Jewelry";
+        } else if (type == 1) {
+            typeText = "Shoes";
+        } else if (type == 2) {
+            typeText = "Handbags";
+        } else if (type == 3) {
+            typeText = "Clothes";
+        } else {
+            typeText = "Accessories";
+        }
+        return typeText;
+    }
 
     const triggerBuy = () => {
         buy(object_id, price);
@@ -29,8 +60,12 @@ const Design = ({ design, buy, putOffer, takeOffer }) => {
     };
 
     const triggerTakeOffer = () => {
-        let {top_bidder, top_offer} = getTopBidder();
-        takeOffer(object_id, top_bidder);
+        if (account.accountId != owner) {
+            takeOffer(object_id, null);
+        } else {
+            let {top_bidder, top_offer} = getTopBidder();
+            takeOffer(object_id, top_bidder);
+        }
     };
 
     return (
@@ -38,7 +73,7 @@ const Design = ({ design, buy, putOffer, takeOffer }) => {
             <Card className="card-background1">
                 <Card.Header>
                     <Stack direction="horizontal" gap={2}>
-                        <span className="font-monospace text-secondary">{owner}</span>
+                        <span className="font-monospace text-secondary">Designer: {orig_owner}</span>
                         <Badge bg="status" className="ms-auto">
                             {on_sale}
                         </Badge>
@@ -48,10 +83,9 @@ const Design = ({ design, buy, putOffer, takeOffer }) => {
                     <img src={image} alt={object_id} style={{ objectFit: "cover" }} />
                 </div>
                 <Card.Body className="d-flex    flex-column text-center">
-                    <Card.Title>{object_id}</Card.Title>
-                    <Card.Text className="flex-grow-1 ">{type}</Card.Text>
+                    <Card.Title>{getTypeText()}, {object_id}</Card.Title>
                     <Card.Text className="text-secondary">
-                        <span>{orig_owner}</span>
+                        <span>Owner: {owner}</span>
                     </Card.Text>
                     <Button
                         variant="outline-dark"
@@ -59,9 +93,7 @@ const Design = ({ design, buy, putOffer, takeOffer }) => {
                         className="w-100 py-3"
                     >
                         <h2 className="content2">
-                            Buy for
-                            {utils.format.formatNearAmount(price)}
-                            NEAR
+                            Buy for {utils.format.formatNearAmount(price)} NEAR
                         </h2>
                     </Button>
                     <Button
@@ -69,17 +101,16 @@ const Design = ({ design, buy, putOffer, takeOffer }) => {
                         onClick={triggerPutOffer}
                         className="w-100 py-3"
                     >
-                        <h1 class="content">Place an offer</h1>
+                        <h1 className="content2">Place an offer</h1>
                     </Button>
                     <Button
                         variant="outline-dark"
                         onClick={triggerTakeOffer}
                         className="w-100 py-3"
+                        disabled={!offerExist()}
                     >
                         <h2 class="content2">
-                            Take top offer for
-                            {utils.format.formatNearAmount((getTopBidder().top_offer))}
-                            NEAR
+                            {getOfferText()}
                         </h2>
                     </Button>
                 </Card.Body>
