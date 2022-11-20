@@ -1,5 +1,6 @@
 import { NearBindgen, near, call, view, UnorderedMap, assert, initialize } from 'near-sdk-js';
-import { create_design, replace_design, get_design, get_design_owned, get_design_orig_owned, get_design_no_deposit, purchase_process, process_design_deposit, transfer_near } from './utils';
+import { create_design, replace_design, get_design, get_design_owned, get_design_orig_owned, get_design_no_deposit} from './utils';
+import { purchase_process, process_design_deposit, process_offer, transfer_near } from './utils';
 import { create_report, get_report, get_report_owned, get_report_no_deposit, process_report_deposit, process_report_approval } from './utils';
 
 // lock design copyright deposit for 30 days
@@ -100,23 +101,28 @@ export class Contract {
 
     @call({ payableFunction: true })
     // place an offer on a specific design
-    add_offer({object_id} : {object_id: string}) {
+    add_offer({object_id, offer} : {object_id: string, offer: string}) {
         let design = get_design({contract: this, object_id});
         let bidder = near.predecessorAccountId();
         assert(bidder != design.owner, "Owner cannot put an offer on her/his own Design");
-        let offer = near.attachedDeposit().valueOf();
-        assert(offer > 0, "Offer must be non-zero");
+        let attachedDeposit = near.attachedDeposit().valueOf();
+        assert(BigInt(offer) > 0, "Offer must be non-zero");
+        //measure the initial storage being used on the contract
+        let initialStorageUsage = near.storageUsage();
         let new_offers: { [accountId: string] : string } = {};
         Object.entries(design.offers).forEach(([key, value], index) => {
             new_offers[key] = value;
         });
-        new_offers[bidder] = offer.toString();
+        new_offers[bidder] = offer;
         let new_design = replace_design({design, offers: new_offers});
         this.designs.set(object_id, new_design);
+        //calculate the required storage which was the used
+        let requiredStorageInBytes = near.storageUsage().valueOf() - initialStorageUsage.valueOf();
+        process_offer({offer, storageUsed: requiredStorageInBytes});
     }
 
     @call({ payableFunction: true })
-    // place an offer on a specific design
+    // remove an offer on a specific design
     remove_offer({object_id} : {object_id: string}) {
         let design = get_design({contract: this, object_id});
         let bidder = near.predecessorAccountId();
@@ -124,6 +130,8 @@ export class Contract {
         Object.entries(design.offers).forEach(([key, value], index) => {
             if (key != bidder) {
                 new_offers[key] = value;
+            } else {
+                transfer_near(bidder, BigInt(value));
             }
         });
         let new_design = replace_design({design, offers: new_offers});
@@ -159,7 +167,7 @@ export class Contract {
         if (report == null) {
             throw Error("Report is not created successfully");
         }
-        let report_id = object_id + design.reports.toString();
+        let report_id = object_id + "R" + design.reports.toString();
         this.reports.set(report_id, report);
         design.reports += 1;
         this.designs.set(object_id, design);
@@ -270,7 +278,7 @@ export class Contract {
         }
         let reports = [];
         for (let i = 0; i < design.reports; i++) {
-            let report_id = object_id + i.toString();
+            let report_id = object_id + "R" + i.toString();
             let report = get_report_no_deposit({contract: this, report_id});
             reports.push(report);
         }

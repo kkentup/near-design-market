@@ -3,7 +3,7 @@ import { Design } from "./design";
 import { Contract } from "./index";
 import { Report } from "./report";
 
-// 1 near
+// 1 NEAR
 const MIN_COPYRIGHT_DEPOSIT = "1000000000000000000000000";
 
 // make sure the user attached at least 1 yoctoNEAR
@@ -43,6 +43,7 @@ export function create_design({
     assert(design == null, "Design already exists on market");
 
     let owner = near.predecessorAccountId();
+    assert(BigInt(deposit) >= BigInt(price) / 5n, "Copyright Deposit must be at least 20% of the object price");
     return new Design({owner, object_id, type, price, image, offers, deposit, timeStamp: timeStamp.toString()});
 }
 
@@ -142,8 +143,32 @@ export function process_design_deposit({ design, storageUsed} : {design: Design,
         `Must attach ${requiredCost + BigInt(MIN_COPYRIGHT_DEPOSIT)} yoctoNEAR to cover storage and copyright protection fee`
     );
 
-    //get the copyright protection amount
+    //get amount of refund
     let refund = attachedDeposit - requiredCost - BigInt(design.copyright_deposit);
+    near.log(`Refunding ${refund} yoctoNEAR`);
+
+    //if the refund is greater than 1 yocto NEAR, we refund the predecessor that amount
+    if (refund > 1) {
+        // Send the money to the beneficiary
+        transfer_near(near.predecessorAccountId(), refund);
+    }
+}
+
+// process the deposit based on offer and the amount of storage that was used up
+export function process_offer({ offer, storageUsed} : {offer: string, storageUsed: bigint}) {
+    //get how much it would cost to store the information
+    let requiredCost = storageUsed * near.storageByteCost().valueOf()
+    //get the attached deposit
+    let attachedDeposit = near.attachedDeposit().valueOf();
+
+    //make sure that the attached deposit is greater than or equal to the required deposit
+    assert(
+        requiredCost + BigInt(offer) <= attachedDeposit,
+        `Must attach ${requiredCost + BigInt(offer)} yoctoNEAR to cover storage and offer`
+    );
+
+    //get amount of refund
+    let refund = attachedDeposit - requiredCost - BigInt(offer);
     near.log(`Refunding ${refund} yoctoNEAR`);
 
     //if the refund is greater than 1 yocto NEAR, we refund the predecessor that amount
@@ -281,7 +306,7 @@ export function process_report_deposit({ design, report, storageUsed} : {design:
     //get the attached deposit
     let attachedDeposit = near.attachedDeposit().valueOf();
 
-    //make sure that the attached deposit is greater than or equal to the required deposit
+    //make sure that the attached deposit is greater than or equal to half the design price
     assert((BigInt(design.copyright_deposit) / 2n) <= BigInt(report.deposit),
         `Deposit cannot be less than ${BigInt(design.copyright_deposit) / 2n} yoctoNEAR`
     );

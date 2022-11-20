@@ -1,4 +1,4 @@
-const CONTRACT_NAME = "designtest9.kent777.testnet";
+const CONTRACT_NAME = "designtest1.kentup.testnet";
 
 function environment() {
     return {

@@ -85,7 +85,7 @@ test("add a new offer works", async t => {
     let designs = await market.view('get_designs', {});
     t.deepEqual(designs[0][1], {object_id: "design_1", type: 1, price: "10000000000000000", image: "image_link_1", offers: {}, on_sale: true, orig_owner: ali.accountId, owner: ali.accountId, copyright_deposit: ONE_NEAR, reports: 0, timeStamp: designs[0][1].timeStamp});
 
-    await bob.call(market, "add_offer", {object_id: "design_1"}, {attachedDeposit: offer});
+    await bob.call(market, "add_offer", {object_id: "design_1", offer}, {attachedDeposit});
 
     designs = await market.view('get_designs', {});
     let cur_offers = {};
@@ -115,7 +115,7 @@ test("add a new report works", async t => {
     reports = await market.view('get_reports_by_object_id', {object_id: "design_1"});
     t.deepEqual(reports[0], {object_id: "design_1", reporter: bob.accountId, report: "report_1", report_id: 0, approved: false, proof: "", deposit: ONE_NEAR, timeStamp: reports[0].timeStamp});
 
-    await root.call(market, 'approve_report', {report_id: "design_10", proof: "proof_1"}, {attachedDeposit});
+    await root.call(market, 'approve_report', {report_id: "design_1R0", proof: "proof_1"}, {attachedDeposit});
 
     reports = await market.view('get_reports_by_object_id', {object_id: "design_1"});
     t.deepEqual(reports[0], {object_id: "design_1", reporter: bob.accountId, report: "report_1", report_id: 0, approved: true, proof: "proof_1", deposit: "0", timeStamp: reports[0].timeStamp});

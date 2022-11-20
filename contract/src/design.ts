@@ -1,6 +1,6 @@
 export class Design {
     object_id: string;
-    // 0: bracelet, 1: necklace, 2: ring, 3: earring
+    // 0: Jewelry, 1: Shoes, 2: Handbags, 3: Clothes, 4: Accessories
     type: number;
     orig_owner: string;
     owner: string;
