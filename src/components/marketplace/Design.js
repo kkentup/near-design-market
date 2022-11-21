@@ -110,7 +110,7 @@ const Design = ({ design, buy, putOffer, takeOffer, account }) => {
                 </div>
                 <Card.Body className="d-flex flex-column text">
                     <Card.Title>{getTypeText()}, {object_id}</Card.Title>
-                    <Card.Text className="text-secondary">
+                    <Card.Text className="text">
                         <span>{getReportText()}</span>
                     </Card.Text>
                     <Card.Text className="text">
@@ -126,7 +126,7 @@ const Design = ({ design, buy, putOffer, takeOffer, account }) => {
                         </h2>
                     </Button>
                     <form className="w-100 py-3">
-                        <input placeholder='Offer' onChange={(e) => {
+                        <input placeholder='Offer' type="text" onChange={(e) => {
                             setNewOffer(e.target.value);
                         }}/>
                         <Button onClick={triggerPutOffer} disabled={isOwner()}>Add offer</Button>

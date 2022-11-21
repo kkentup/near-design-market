@@ -7,7 +7,7 @@
 
 **1.2** "npm start"
 
-Then you can open http://localhost:3000/ to see the app. Smart contract ("designtest1.kentup.testnet") currently deployed on testnet is used by default.
+Then you can open http://localhost:3000/ to see the app. Smart contract ("designmarket.kentup.testnet") currently deployed on testnet is used by default.
 
 **2**\. Smart contract is in folder "contract"
 
