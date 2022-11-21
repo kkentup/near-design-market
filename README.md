@@ -1,5 +1,5 @@
 # near-design-farmers'-market
-**developed by husband and wife**
+**developed by wife and husband**
 
 **1**\. To run this project is easy, you need run the following commands
 
@@ -46,3 +46,5 @@ near call test.designmarket.testnet new_design '{"object_id": "design_1", "type"
 near call test.designmarket.testnet buy_design '{"object_id": "design_1"}' --depositYocto=100000000000000000000000 --accountId=client2.testnet
 
 near call test.designmarket.testnet add_offer '{"object_id": "design_1"}' --depositYocto=1000000000000000000000000 --accountId=client3.testnet
+
+near call test.designmarket.testnet new_report '{"object_id": "home_decor", "report_url": "report_1", "deposit": "500000000000000000000000"}' --depositYocto=1000000000000000000000000 --accountId=client4.testnet
