@@ -121,5 +121,5 @@ test("add a new report works", async t => {
     t.deepEqual(reports[0], {object_id: "design_1", reporter: bob.accountId, report: "report_1", report_id: 0, approved: true, proof: "proof_1", deposit: "0", timeStamp: reports[0].timeStamp});
 
     const pool = await market.view("get_pool_amount", {});
-    t.is(pool, "50000000000000000000000");
+    t.is(pool, "25000000000000000000000");
 });

@@ -31,15 +31,14 @@ code {
   font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
   font-size:800%;
   font-variant-position:sub;
-  margin-left: 31%;
-
+  text-align: center;
 }
 
 .sub-title{
   color:#591202;
   font-variant-position:inherit;
   font-size:150%;
-  margin-left: 37%;
+  text-align: center;
 }
 
 .third-title{

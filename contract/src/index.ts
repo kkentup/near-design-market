@@ -59,7 +59,9 @@ export class Contract {
             throw Error("attached deposit must be greater than the design's price");
         }
         assert(design.on_sale == true, "Design is not on sale");
-        purchase_process({design: design, buyer: near.predecessorAccountId(), offer: near.attachedDeposit().valueOf()});
+        let fee = purchase_process({design: design, buyer: near.predecessorAccountId(), offer: near.attachedDeposit().valueOf()});
+        let new_pool = fee + BigInt(this.treasury_pool);
+        this.treasury_pool = new_pool.toString();
         this.designs.set(object_id, design);
     }
 
@@ -194,7 +196,7 @@ export class Contract {
         let approver = near.predecessorAccountId();
         assert(approver == this.owner_id, "Only the contract onwer can approve a report");
         let fee = process_report_approval({report, proof, design});
-	let new_pool = fee + BigInt(this.treasury_pool);
+        let new_pool = fee + BigInt(this.treasury_pool);
         this.treasury_pool = new_pool.toString();
         this.designs.set(object_id, design);
         this.reports.set(report_id, report);
@@ -205,7 +207,7 @@ export class Contract {
     deny_report({report_id, proof} : {report_id: string, proof: string}) {
         let report = get_report({contract: this, report_id});
         let approver = near.predecessorAccountId();
-        assert(approver == this.owner_id, "Only the contract onwer can approve a report");
+        assert(approver == this.owner_id, "Only the contract onwer can deny a report");
         report.proof = proof;
         report.deposit = "0";
         this.reports.set(report_id, report);

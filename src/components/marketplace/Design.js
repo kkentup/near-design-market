@@ -1,10 +1,13 @@
-import React from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { utils } from "near-api-js";
 import { Card, Button, Col, Badge, Stack } from "react-bootstrap";
 
+
 const Design = ({ design, buy, putOffer, takeOffer, account }) => {
-    const { object_id: object_id, type, orig_owner, owner, on_sale, price, image, offers } = design;
+    const { object_id, type, orig_owner, owner, reports, on_sale, price, image, offers } = design;
+
+    const [newOffer, setNewOffer] = useState("");
 
     const offerExist = () => Object.keys(offers).length > 0;
 
@@ -50,12 +53,27 @@ const Design = ({ design, buy, putOffer, takeOffer, account }) => {
         return typeText;
     }
 
+    const getReportText = () => {
+        let reportText;
+        if (reports == 0) {
+            reportText = "NO reports";
+        } else if (reports == 1) {
+            reportText = `${reports} report`;
+        } else {
+            reportText = `${reports} reports`;
+        }
+
+        return reportText;
+    }
+
     const triggerBuy = () => {
         buy(object_id, price, isOwner());
     };
 
     const triggerPutOffer = () => {
-        putOffer(object_id, price);
+        console.log(object_id)
+        console.log(newOffer)
+        putOffer(object_id, newOffer);
     };
 
     // function to select the account who put the top offer
@@ -72,12 +90,8 @@ const Design = ({ design, buy, putOffer, takeOffer, account }) => {
     };
 
     const triggerTakeOffer = () => {
-        if (account.accountId != owner) {
-            takeOffer(object_id, null);
-        } else {
-            let {top_bidder, top_offer} = getTopBidder();
-            takeOffer(object_id, top_bidder);
-        }
+        let {top_bidder, top_offer} = getTopBidder();
+        takeOffer(object_id, top_bidder);
     };
 
     return (
@@ -85,7 +99,7 @@ const Design = ({ design, buy, putOffer, takeOffer, account }) => {
             <Card className="card-background1">
                 <Card.Header>
                     <Stack direction="horizontal" gap={2}>
-                        <span className="font-monospace text-secondary">Designer: {orig_owner}</span>
+                        <span className="font-monospace text">Designer: {orig_owner}</span>
                         <Badge bg="status" className="ms-auto">
                             {on_sale}
                         </Badge>
@@ -94,9 +108,12 @@ const Design = ({ design, buy, putOffer, takeOffer, account }) => {
                 <div className=" ratio ratio-4x3">
                     <img src={image} alt={object_id} style={{ objectFit: "cover" }} />
                 </div>
-                <Card.Body className="d-flex    flex-column text-center">
+                <Card.Body className="d-flex flex-column text">
                     <Card.Title>{getTypeText()}, {object_id}</Card.Title>
                     <Card.Text className="text-secondary">
+                        <span>{getReportText()}</span>
+                    </Card.Text>
+                    <Card.Text className="text">
                         <span>Owner: {owner}</span>
                     </Card.Text>
                     <Button
@@ -108,19 +125,17 @@ const Design = ({ design, buy, putOffer, takeOffer, account }) => {
                             {getPurchaseText()}
                         </h2>
                     </Button>
-                    <Button
-                        variant="outline-dark"
-                        onClick={triggerPutOffer}
-                        className="w-100 py-3"
-                        disabled={isOwner()}
-                    >
-                        <h1 className="content2">Place an offer</h1>
-                    </Button>
+                    <form className="w-100 py-3">
+                        <input placeholder='Offer' onChange={(e) => {
+                            setNewOffer(e.target.value);
+                        }}/>
+                        <Button onClick={triggerPutOffer} disabled={isOwner()}>Add offer</Button>
+                    </form>
                     <Button
                         variant="outline-dark"
                         onClick={triggerTakeOffer}
                         className="w-100 py-3"
-                        disabled={!offerExist()}
+                        disabled={!offerExist() || !isOwner()}
                     >
                         <h2 class="content2">
                             {getOfferText()}

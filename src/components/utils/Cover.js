@@ -24,8 +24,8 @@ const Cover = ({ name, login, coverImg }) => {
                     <h1 className="title"> {name} </h1>
                     <p className="sub-title">Please connect your wallet to continue.</p>
 
-                    <IconButton onClick={login} style={{left:750}}>
-                      <IoFingerPrint size={80} color="#591202" />
+                    <IconButton onClick={login}  style={{ width: "100%", display: "flex", justifyContent: "center" }}>
+                        <IoFingerPrint size="80" color="#591202" />
                     </IconButton>
                 </div>
             </div>

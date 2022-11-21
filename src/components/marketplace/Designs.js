@@ -37,8 +37,8 @@ const Designs = ({account}) => {
             setLoading(true);
             newDesign(data).then((resp) => {
                 getDesigns();
+                toast(<NotificationSuccess text="Design added successfully." />);
             });
-            toast(<NotificationSuccess text="Design added successfully." />);
         } catch (error) {
             console.log({ error });
             toast(<NotificationError text="Failed to create a new design." />);
@@ -48,13 +48,13 @@ const Designs = ({account}) => {
     };
 
     // function to buy Design
-    const buy = async (id, price, isOwner) => {
+    const buy = async (object_id, price, isOwner) => {
         try {
             if (isOwner) {
                 toast(<NotificationSuccess text="Start downloading soon..." />);
                 return;
             }
-            await buyDesign({id, price}).then((resp) => {
+            await buyDesign({object_id, price}).then((resp) => {
                 getDesigns();
             });
             toast(<NotificationSuccess text="Design bought successfully" />);
@@ -66,13 +66,13 @@ const Designs = ({account}) => {
     };
 
     // function to add a new offer on a Design
-    const newOffer = async (id, offer) => {
+    const newOffer = async (object_id, offer) => {
         try {
             setLoading(true);
-            addOffer({id, offer}).then((resp) => {
+            addOffer({object_id, offer}).then((resp) => {
                 getDesigns();
+                toast(<NotificationSuccess text="Offer added successfully." />);
             });
-            toast(<NotificationSuccess text="Offer added successfully." />);
         } catch (error) {
             console.log({ error });
             toast(<NotificationError text="Failed to create a new offer." />);
@@ -82,17 +82,17 @@ const Designs = ({account}) => {
     };
 
     // function to take the top offer on a Design
-    const acceptOffer = async (id, bidder) => {
+    const acceptOffer = async (object_id, bidder) => {
         try {
             if (bidder == null) {
                 toast(<NotificationSuccess text="Only the owner can take the offer." />);
                 return;
             }
             setLoading(true);
-            takeOffer({id, bidder}).then((resp) => {
+            takeOffer({object_id, bidder}).then((resp) => {
                 getDesigns();
+                toast(<NotificationSuccess text="Top offer taken successfully." />);
             });
-            toast(<NotificationSuccess text="Top offer taken successfully." />);
         } catch (error) {
             console.log({ error });
             toast(<NotificationError text="Failed to take the top offer." />);

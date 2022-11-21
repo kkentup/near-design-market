@@ -183,6 +183,11 @@ function get_royalty(price: bigint): bigint {
     return price / 20n;
 }
 
+// calculate platform fee, 2.5%
+function get_fee(price: bigint): bigint {
+    return price / 40n;
+}
+
 // process the purchase
 export function purchase_process({
     design,
@@ -192,12 +197,14 @@ export function purchase_process({
     design: Design,
     buyer: string,
     offer: bigint
-}): void {
+}): bigint {
     let royalty = get_royalty(offer);
+    let fee = get_fee(offer);
     transfer_near(design.orig_owner, royalty);
-    transfer_near(design.owner, offer - royalty);
+    transfer_near(design.owner, offer - royalty - fee);
     design.on_sale = false;
     design.owner = buyer;
+    return fee;
 }
 
 // return the report of specific id
@@ -273,11 +280,6 @@ export function get_report_no_deposit({
     let design = contract.reports.get(report_id) as Design;
     assert(design != null, `Report with ID ${report_id} doesn't exist`);
     return design;
-}
-
-// calculate royalty, 5%
-function get_fee(price: bigint): bigint {
-    return price / 20n;
 }
 
 // process the approval of speicific report
